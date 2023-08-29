@@ -16,8 +16,8 @@ def run():
         stub = step_recomendation_pb2_grpc.Recomendation_systemStub(channel)
 
         # response = stub.recomend_step1(step_recomendation_pb2.Step1Request(houseArea = 1, siteArea = 2, floorCount = 3, region = 4, budgetFloor = 5, budgetCeil = 6)
-        response = stub.recomend_step1(step_recomendation_pb2.Step1Request(houseArea = 1, siteArea = 2, floorCount = 3, region = 'Адыгея', budgetFloor = 5, budgetCeil = 6))
-    print("Greeter client received: " + response.message)
+        response = stub.recomend_step1(step_recomendation_pb2.Step1Request(step0 = step_recomendation_pb2.Step0(houseArea = 1, siteArea = 2, floorCount = 3, region = 'Адыгея', budgetFloor = 5, budgetCeil = 6)))
+    print("Greeter client received: ")
 
 
 if __name__ == "__main__":

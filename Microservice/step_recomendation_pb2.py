@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18step_recomendation.proto\"\x80\x01\n\x0cStep1Request\x12\x11\n\thouseArea\x18\x01 \x01(\r\x12\x10\n\x08siteArea\x18\x02 \x01(\r\x12\x12\n\nfloorCount\x18\x03 \x01(\r\x12\x0e\n\x06region\x18\x04 \x01(\t\x12\x13\n\x0b\x62udgetFloor\x18\x05 \x01(\r\x12\x12\n\nbudgetCeil\x18\x06 \x01(\r\" \n\rStep1Response\x12\x0f\n\x07message\x18\x01 \x01(\t2I\n\x14Recomendation_system\x12\x31\n\x0erecomend_step1\x12\r.Step1Request\x1a\x0e.Step1Response\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18step_recomendation.proto\"y\n\x05Step0\x12\x11\n\thouseArea\x18\x01 \x01(\r\x12\x10\n\x08siteArea\x18\x02 \x01(\r\x12\x12\n\nfloorCount\x18\x03 \x01(\r\x12\x0e\n\x06region\x18\x04 \x01(\t\x12\x13\n\x0b\x62udgetFloor\x18\x05 \x01(\r\x12\x12\n\nbudgetCeil\x18\x06 \x01(\r\"\xa0\x01\n\x0fSitePreparation\x12\x14\n\x0csiteChoosing\x18\x01 \x01(\x08\x12\x17\n\x0fgeologicalWorks\x18\x02 \x01(\x08\x12\x17\n\x0fgeodeticalWorks\x18\x03 \x01(\x08\x12$\n\x1c\x63uttingBushesAndSmallForests\x18\x04 \x01(\x08\x12\x1f\n\x17\x63learingTheSiteOfDebris\x18\x05 \x01(\x08\"4\n\tSiteWorks\x12\x0f\n\x07\x63\x61meras\x18\x01 \x01(\x08\x12\x16\n\x0etemporaryFence\x18\x02 \x01(\x08\"C\n\x15HouseDesignAndProject\x12\x13\n\x0bhomeProject\x18\x01 \x01(\x08\x12\x15\n\rdesignProject\x18\x02 \x01(\x08\"\x88\x01\n\x05Step1\x12)\n\x0fsitePreparation\x18\x01 \x01(\x0b\x32\x10.SitePreparation\x12\x1d\n\tsiteWorks\x18\x02 \x01(\x0b\x32\n.SiteWorks\x12\x35\n\x15houseDesignAndProject\x18\x03 \x01(\x0b\x32\x16.HouseDesignAndProject\"\x1f\n\x05Step2\x12\x16\n\x0e\x66oundationType\x18\x01 \x01(\t\"\x1e\n\x05Step3\x12\x15\n\rwallsMaterial\x18\x01 \x01(\t\"/\n\x05Step4\x12\x14\n\x0cslopesNumber\x18\x01 \x01(\r\x12\x10\n\x08roofType\x18\x02 \x01(\t\"!\n\x05Step5\x12\x18\n\x10\x66\x61\x63\x61\x64\x65Technology\x18\x01 \x01(\t\"I\n\x05Step6\x12\x16\n\x0ewindowMaterial\x18\x01 \x01(\t\x12\x12\n\nwindowType\x18\x02 \x01(\t\x12\x14\n\x0c\x64oorMaterial\x18\x03 \x01(\t\"\x80\x02\n\x0b\x45lectrician\x12 \n\x18plasticBoxesUpTo40mmWide\x18\x01 \x01(\x08\x12\x1a\n\x12layingAThreeToFive\x18\x02 \x01(\x08\x12\x13\n\x0b\x63\x61\x62leLaying\x18\x03 \x01(\x08\x12\x1c\n\x14installationOfTwoKey\x18\x04 \x01(\x08\x12\x1f\n\x17installationOfSingleKey\x18\x05 \x01(\x08\x12 \n\x18recessedTypeSocketDevice\x18\x06 \x01(\x08\x12\x1d\n\x15installationOfPendant\x18\x07 \x01(\x08\x12\x1e\n\x16\x63handeliersAndPendants\x18\x08 \x01(\x08\"\x97\x01\n\x0bWaterSupply\x12,\n$layingOfInternalWaterSupplyPipelines\x18\x01 \x01(\x08\x12\x1e\n\x16installationOfBathtubs\x18\x02 \x01(\x08\x12\x1c\n\x14installationOfSingle\x18\x03 \x01(\x08\x12\x1c\n\x14installationOfMixers\x18\x04 \x01(\x08\"e\n\x08Sewerage\x12\x1c\n\x14installationOfToilet\x18\x01 \x01(\x08\x12\x1c\n\x14layingOfSewerage50mm\x18\x02 \x01(\x08\x12\x1d\n\x15layingOfSewerage110mm\x18\x03 \x01(\x08\"y\n\x07Heating\x12\x1e\n\x16\x61ssemblyOfAWaterSupply\x18\x01 \x01(\x08\x12(\n layingOfInternalHeatingPipelines\x18\x02 \x01(\x08\x12$\n\x1cinstallationOfWindowFixtures\x18\x03 \x01(\x08\"N\n\x0bVentilation\x12\"\n\x1ainstallationOfSplitSystems\x18\x01 \x01(\x08\x12\x1b\n\x13\x63\x61\x62lingOnABrickWall\x18\x02 \x01(\x08\"\xa8\x01\n\x05Step7\x12!\n\x0b\x65lectrician\x18\x01 \x01(\x0b\x32\x0c.Electrician\x12!\n\x0bwaterSupply\x18\x02 \x01(\x0b\x32\x0c.WaterSupply\x12\x1b\n\x08sewerage\x18\x03 \x01(\x0b\x32\t.Sewerage\x12\x19\n\x07heating\x18\x04 \x01(\x0b\x32\x08.Heating\x12!\n\x0bventilation\x18\x05 \x01(\x0b\x32\x0c.Ventilation\"2\n\x05Step8\x12\x11\n\twarmFloor\x18\x01 \x01(\x08\x12\x16\n\x0eladderMaterial\x18\x02 \x01(\t\"L\n\x05Step9\x12\x16\n\x0ewallDecoration\x18\x01 \x01(\t\x12\x15\n\rfloorCovering\x18\x02 \x01(\t\x12\x14\n\x0c\x63\x65ilCovering\x18\x03 \x01(\t\"%\n\x0cStep1Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\"<\n\x0cStep2Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\"S\n\x0cStep3Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\"j\n\x0cStep4Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\"\x81\x01\n\x0cStep5Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\x12\x15\n\x05step4\x18\x05 \x01(\x0b\x32\x06.Step4\"\x98\x01\n\x0cStep6Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\x12\x15\n\x05step4\x18\x05 \x01(\x0b\x32\x06.Step4\x12\x15\n\x05step5\x18\x06 \x01(\x0b\x32\x06.Step5\"\xaf\x01\n\x0cStep7Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\x12\x15\n\x05step4\x18\x05 \x01(\x0b\x32\x06.Step4\x12\x15\n\x05step5\x18\x06 \x01(\x0b\x32\x06.Step5\x12\x15\n\x05step6\x18\x07 \x01(\x0b\x32\x06.Step6\"\xc6\x01\n\x0cStep8Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\x12\x15\n\x05step4\x18\x05 \x01(\x0b\x32\x06.Step4\x12\x15\n\x05step5\x18\x06 \x01(\x0b\x32\x06.Step5\x12\x15\n\x05step6\x18\x07 \x01(\x0b\x32\x06.Step6\x12\x15\n\x05step7\x18\x08 \x01(\x0b\x32\x06.Step7\"\xdd\x01\n\x0cStep9Request\x12\x15\n\x05step0\x18\x01 \x01(\x0b\x32\x06.Step0\x12\x15\n\x05step1\x18\x02 \x01(\x0b\x32\x06.Step1\x12\x15\n\x05step2\x18\x03 \x01(\x0b\x32\x06.Step2\x12\x15\n\x05step3\x18\x04 \x01(\x0b\x32\x06.Step3\x12\x15\n\x05step4\x18\x05 \x01(\x0b\x32\x06.Step4\x12\x15\n\x05step5\x18\x06 \x01(\x0b\x32\x06.Step5\x12\x15\n\x05step6\x18\x07 \x01(\x0b\x32\x06.Step6\x12\x15\n\x05step7\x18\x08 \x01(\x0b\x32\x06.Step7\x12\x15\n\x05step8\x18\t \x01(\x0b\x32\x06.Step8\"&\n\rStep1Response\x12\x15\n\x05step1\x18\x01 \x01(\x0b\x32\x06.Step1\"&\n\rStep2Response\x12\x15\n\x05step2\x18\x01 \x01(\x0b\x32\x06.Step2\"&\n\rStep3Response\x12\x15\n\x05step3\x18\x01 \x01(\x0b\x32\x06.Step3\"&\n\rStep4Response\x12\x15\n\x05step4\x18\x01 \x01(\x0b\x32\x06.Step4\"&\n\rStep5Response\x12\x15\n\x05step5\x18\x01 \x01(\x0b\x32\x06.Step5\"&\n\rStep6Response\x12\x15\n\x05step6\x18\x01 \x01(\x0b\x32\x06.Step6\"&\n\rStep7Response\x12\x15\n\x05step7\x18\x01 \x01(\x0b\x32\x06.Step7\"&\n\rStep8Response\x12\x15\n\x05step8\x18\x01 \x01(\x0b\x32\x06.Step8\"&\n\rStep9Response\x12\x15\n\x05step9\x18\x01 \x01(\x0b\x32\x06.Step92\xe1\x03\n\x14Recomendation_system\x12\x31\n\x0erecomend_step1\x12\r.Step1Request\x1a\x0e.Step1Response\"\x00\x12\x31\n\x0erecomend_step2\x12\r.Step2Request\x1a\x0e.Step2Response\"\x00\x12\x31\n\x0erecomend_step3\x12\r.Step3Request\x1a\x0e.Step3Response\"\x00\x12\x31\n\x0erecomend_step4\x12\r.Step4Request\x1a\x0e.Step4Response\"\x00\x12\x31\n\x0erecomend_step5\x12\r.Step5Request\x1a\x0e.Step5Response\"\x00\x12\x31\n\x0erecomend_step6\x12\r.Step6Request\x1a\x0e.Step6Response\"\x00\x12\x31\n\x0erecomend_step7\x12\r.Step7Request\x1a\x0e.Step7Response\"\x00\x12\x31\n\x0erecomend_step8\x12\r.Step8Request\x1a\x0e.Step8Response\"\x00\x12\x31\n\x0erecomend_step9\x12\r.Step9Request\x1a\x0e.Step9Response\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -21,10 +21,78 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'step_recomendation_pb2', _g
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _globals['_STEP1REQUEST']._serialized_start=29
-  _globals['_STEP1REQUEST']._serialized_end=157
-  _globals['_STEP1RESPONSE']._serialized_start=159
-  _globals['_STEP1RESPONSE']._serialized_end=191
-  _globals['_RECOMENDATION_SYSTEM']._serialized_start=193
-  _globals['_RECOMENDATION_SYSTEM']._serialized_end=266
+  _globals['_STEP0']._serialized_start=28
+  _globals['_STEP0']._serialized_end=149
+  _globals['_SITEPREPARATION']._serialized_start=152
+  _globals['_SITEPREPARATION']._serialized_end=312
+  _globals['_SITEWORKS']._serialized_start=314
+  _globals['_SITEWORKS']._serialized_end=366
+  _globals['_HOUSEDESIGNANDPROJECT']._serialized_start=368
+  _globals['_HOUSEDESIGNANDPROJECT']._serialized_end=435
+  _globals['_STEP1']._serialized_start=438
+  _globals['_STEP1']._serialized_end=574
+  _globals['_STEP2']._serialized_start=576
+  _globals['_STEP2']._serialized_end=607
+  _globals['_STEP3']._serialized_start=609
+  _globals['_STEP3']._serialized_end=639
+  _globals['_STEP4']._serialized_start=641
+  _globals['_STEP4']._serialized_end=688
+  _globals['_STEP5']._serialized_start=690
+  _globals['_STEP5']._serialized_end=723
+  _globals['_STEP6']._serialized_start=725
+  _globals['_STEP6']._serialized_end=798
+  _globals['_ELECTRICIAN']._serialized_start=801
+  _globals['_ELECTRICIAN']._serialized_end=1057
+  _globals['_WATERSUPPLY']._serialized_start=1060
+  _globals['_WATERSUPPLY']._serialized_end=1211
+  _globals['_SEWERAGE']._serialized_start=1213
+  _globals['_SEWERAGE']._serialized_end=1314
+  _globals['_HEATING']._serialized_start=1316
+  _globals['_HEATING']._serialized_end=1437
+  _globals['_VENTILATION']._serialized_start=1439
+  _globals['_VENTILATION']._serialized_end=1517
+  _globals['_STEP7']._serialized_start=1520
+  _globals['_STEP7']._serialized_end=1688
+  _globals['_STEP8']._serialized_start=1690
+  _globals['_STEP8']._serialized_end=1740
+  _globals['_STEP9']._serialized_start=1742
+  _globals['_STEP9']._serialized_end=1818
+  _globals['_STEP1REQUEST']._serialized_start=1820
+  _globals['_STEP1REQUEST']._serialized_end=1857
+  _globals['_STEP2REQUEST']._serialized_start=1859
+  _globals['_STEP2REQUEST']._serialized_end=1919
+  _globals['_STEP3REQUEST']._serialized_start=1921
+  _globals['_STEP3REQUEST']._serialized_end=2004
+  _globals['_STEP4REQUEST']._serialized_start=2006
+  _globals['_STEP4REQUEST']._serialized_end=2112
+  _globals['_STEP5REQUEST']._serialized_start=2115
+  _globals['_STEP5REQUEST']._serialized_end=2244
+  _globals['_STEP6REQUEST']._serialized_start=2247
+  _globals['_STEP6REQUEST']._serialized_end=2399
+  _globals['_STEP7REQUEST']._serialized_start=2402
+  _globals['_STEP7REQUEST']._serialized_end=2577
+  _globals['_STEP8REQUEST']._serialized_start=2580
+  _globals['_STEP8REQUEST']._serialized_end=2778
+  _globals['_STEP9REQUEST']._serialized_start=2781
+  _globals['_STEP9REQUEST']._serialized_end=3002
+  _globals['_STEP1RESPONSE']._serialized_start=3004
+  _globals['_STEP1RESPONSE']._serialized_end=3042
+  _globals['_STEP2RESPONSE']._serialized_start=3044
+  _globals['_STEP2RESPONSE']._serialized_end=3082
+  _globals['_STEP3RESPONSE']._serialized_start=3084
+  _globals['_STEP3RESPONSE']._serialized_end=3122
+  _globals['_STEP4RESPONSE']._serialized_start=3124
+  _globals['_STEP4RESPONSE']._serialized_end=3162
+  _globals['_STEP5RESPONSE']._serialized_start=3164
+  _globals['_STEP5RESPONSE']._serialized_end=3202
+  _globals['_STEP6RESPONSE']._serialized_start=3204
+  _globals['_STEP6RESPONSE']._serialized_end=3242
+  _globals['_STEP7RESPONSE']._serialized_start=3244
+  _globals['_STEP7RESPONSE']._serialized_end=3282
+  _globals['_STEP8RESPONSE']._serialized_start=3284
+  _globals['_STEP8RESPONSE']._serialized_end=3322
+  _globals['_STEP9RESPONSE']._serialized_start=3324
+  _globals['_STEP9RESPONSE']._serialized_end=3362
+  _globals['_RECOMENDATION_SYSTEM']._serialized_start=3365
+  _globals['_RECOMENDATION_SYSTEM']._serialized_end=3846
 # @@protoc_insertion_point(module_scope)

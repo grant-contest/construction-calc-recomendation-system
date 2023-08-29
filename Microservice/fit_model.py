@@ -410,13 +410,20 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
         predicts[key] = True
     if len(value) == 1 and value.isdigit():
       predicts[key] = int(value)
+  return predicts
 
-train_df_enc_np = train_df_encoded_by_columns.to_numpy()
+train_df_encoded_by_columns_np = train_df_encoded_by_columns.to_numpy()
 
 # for i in range(1, len(steps)):
 #   print(i)
 #   step_predict(train_df_enc_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, i)
 
+def get_default_sample (train_df_encoded_by_columns):
+  sample = train_df_encoded_by_columns.iloc[0].copy()
+  for col in train_df_encoded_by_columns.columns:
+    if (sample[col]) == 1.:
+      sample[col] = 0.
+  return sample
 
 from concurrent import futures
 import logging
@@ -425,11 +432,138 @@ import grpc
 import step_recomendation_pb2
 import step_recomendation_pb2_grpc
 
+sample = get_default_sample(train_df_encoded_by_columns)
+
+def step0_to_df (sample, step0):
+  sample["houseArea"] = step0.houseArea
+  sample["siteArea"] = step0.siteArea
+  sample["floorCount"] = step0.floorCount
+  sample["region"] = step0.region
+  sample["budgetFloor"] = step0.budgetFloor
+  sample["budgetCeil"] = step0.budgetCeil
+
+def step1_to_df (sample, step1):
+  sample["siteChoosing"] = step1.SitePreparation.siteChoosing
+  sample["geologicalWorks"] = step1.SitePreparation.geologicalWorks
+  sample["geodeticalWorks"] = step1.SitePreparation.geodeticalWorks
+  sample["cuttingBushesAndSmallForests"] = step1.SitePreparation.cuttingBushesAndSmallForests
+  sample["clearingTheSiteOfDebris"] = step1.SitePreparation.clearingTheSiteOfDebris
+  sample["cameras"] = step1.SiteWorks.cameras
+  sample["temporaryFence"] = step1.SiteWorks.temporaryFence
+  sample["homeProject"] = step1.HouseDesignAndProject.homeProject
+  sample["designProject"] = step1.HouseDesignAndProject.designProject
+
+def step2_to_df (sample, step2):
+  sample["foundationType"] = step2.foundationType
+
+def step3_to_df (sample, step3):
+  sample["wallsMaterial"] = step3.wallsMaterial
+
+def step4_to_df (sample, step4):
+  sample["slopesNumber"] = step4.slopesNumber
+  sample["roofType"] = step4.roofType
+
+def step5_to_df (sample, step5):
+  sample["facadeTechnology"] = step5.facadeTechnology
+
+def step6_to_df (sample, step6):
+  sample["windowMaterial"] = step6.windowMaterial
+  sample["windowType"] = step6.windowType
+  sample["doorMaterial"] = step6.doorMaterial
+  
+def electrician_to_df (sample, electrician):
+  sample["plasticBoxesUpTo40mmWide"] = electrician.plasticBoxesUpTo40mmWide
+  sample["layingAThreeToFive"] = electrician.layingAThreeToFive
+  sample["cableLaying"] = electrician.cableLaying
+  sample["installationOfTwoKey"] = electrician.installationOfTwoKey
+  sample["installationOfSingleKey"] = electrician.installationOfSingleKey
+  sample["recessedTypeSocketDevice"] = electrician.recessedTypeSocketDevice
+  sample["installationOfPendant"] = electrician.installationOfPendant
+  sample["chandeliersAndPendants"] = electrician.chandeliersAndPendants
+  
+def waterSupply_to_df (sample, water_supply):
+  sample["layingOfInternalWaterSupplyPipelines"] = water_supply.layingOfInternalWaterSupplyPipelines
+  sample["installationOfBathtubs"] = water_supply.installationOfBathtubs
+  sample["installationOfSingle"] = water_supply.installationOfSingle
+  sample["installationOfMixers"] = water_supply.installationOfMixers
+
+def sewerage_to_df (sample, sewerage):
+  sample["installationOfToilet"] = sewerage.installationOfToilet
+  sample["layingOfSewerage50mm"] = sewerage.layingOfSewerage50mm
+  sample["layingOfSewerage110mm"] = sewerage.layingOfSewerage110mm
+
+def heating_to_df (sample, heating):
+  sample["assemblyOfAWaterSupply"] = heating.assemblyOfAWaterSupply
+  sample["layingOfInternalHeatingPipelines"] = heating.layingOfInternalHeatingPipelines
+  sample["installationOfWindowFixtures"] = heating.installationOfWindowFixtures
+
+def ventilation_to_df (sample, ventilation):
+  sample["installationOfSplitSystems"] = ventilation.installationOfSplitSystems
+  sample["cablingOnABrickWall"] = ventilation.cablingOnABrickWall
+
+def step7_to_df (sample, step7):
+  electrician_to_df(sample, step7.electrician)
+  waterSupply_to_df(sample, step7.waterSupply)
+  sewerage_to_df(sample, step7.sewerage)
+  heating_to_df(sample, step7.heating)
+  ventilation_to_df(sample, step7.ventilation)
+
+def step8_to_df (sample, step8):
+  sample["warmFloor"] = step8.warmFloor
+  sample["ladderMaterial"] = step8.ladderMaterial
+
+def step9_to_df (sample, step9):
+  sample["wallDecoration"] = step9.wallDecoration
+  sample["floorCovering"] = step9.floorCovering
+  sample["ceilCovering"] = step9.ceilCovering
+
+steps_to_df = [step0_to_df, step1_to_df, step2_to_df,
+               step3_to_df, step4_to_df, step5_to_df,
+               step6_to_df, step7_to_df, step8_to_df,
+               step9_to_df]
+def code_steps_to_df (sample, steps_info):
+  for i in range(len(steps_info)):
+    steps_to_df[i](sample, steps_info[i])
+
+
+def sitePreparation_to_proto (predict):
+  return step_recomendation_pb2.SitePreparation(
+    siteChoosing = predict["siteChoosing"],
+    geologicalWorks = predict["geologicalWorks"],
+    geodeticalWorks = predict["geodeticalWorks"],
+    cuttingBushesAndSmallForests = predict["cuttingBushesAndSmallForests"],
+    clearingTheSiteOfDebris = predict["clearingTheSiteOfDebris"])
+
+def siteWorks_to_proto (predict):
+  return step_recomendation_pb2.SiteWorks(
+    cameras = predict["cameras"],
+    temporaryFence = predict["temporaryFence"]
+  )
+
+def houseDesignAndProject_to_proto (predict):
+  return step_recomendation_pb2.HouseDesignAndProject(
+    homeProject = predict["homeProject"],
+    designProject = predict["designProject"]
+  )
+
+def step1_to_proto(predict):
+  return step_recomendation_pb2.Step1Response(step1 = step_recomendation_pb2.Step1(sitePreparation = sitePreparation_to_proto(predict), 
+                                                                    siteWorks = siteWorks_to_proto(predict),
+                                                                    houseDesignAndProject = houseDesignAndProject_to_proto(predict)))
+
+
 
 class Recomendation_system(step_recomendation_pb2_grpc.Recomendation_systemServicer):
     def recomend_step1(self, request, context):
-        return step_recomendation_pb2.Step1Response(message="Hello !!!!!!")
+        sample = get_default_sample(train_df_encoded_by_columns)
+        
+        steps_info = [request.step0]
+        code_steps_to_df(sample, steps_info)
 
+        predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 1)
+        print(type(predict))
+        print(predict)
+        return step1_to_proto(predict)
 
 def serve():
     port = "50051"
@@ -444,4 +578,5 @@ def serve():
 if __name__ == "__main__":
     logging.basicConfig()
     serve()
+
 
