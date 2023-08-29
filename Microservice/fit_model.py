@@ -429,8 +429,8 @@ from concurrent import futures
 import logging
 
 import grpc
-import step_recomendation_pb2
-import step_recomendation_pb2_grpc
+import step_recomendation_pb2 as sr_pb2
+import step_recomendation_pb2_grpc as sr_pb2_grpc
 
 sample = get_default_sample(train_df_encoded_by_columns)
 
@@ -443,15 +443,15 @@ def step0_to_df (sample, step0):
   sample["budgetCeil"] = step0.budgetCeil
 
 def step1_to_df (sample, step1):
-  sample["siteChoosing"] = step1.SitePreparation.siteChoosing
-  sample["geologicalWorks"] = step1.SitePreparation.geologicalWorks
-  sample["geodeticalWorks"] = step1.SitePreparation.geodeticalWorks
-  sample["cuttingBushesAndSmallForests"] = step1.SitePreparation.cuttingBushesAndSmallForests
-  sample["clearingTheSiteOfDebris"] = step1.SitePreparation.clearingTheSiteOfDebris
-  sample["cameras"] = step1.SiteWorks.cameras
-  sample["temporaryFence"] = step1.SiteWorks.temporaryFence
-  sample["homeProject"] = step1.HouseDesignAndProject.homeProject
-  sample["designProject"] = step1.HouseDesignAndProject.designProject
+  sample["siteChoosing"] = step1.sitePreparation.siteChoosing
+  sample["geologicalWorks"] = step1.sitePreparation.geologicalWorks
+  sample["geodeticalWorks"] = step1.sitePreparation.geodeticalWorks
+  sample["cuttingBushesAndSmallForests"] = step1.sitePreparation.cuttingBushesAndSmallForests
+  sample["clearingTheSiteOfDebris"] = step1.sitePreparation.clearingTheSiteOfDebris
+  sample["cameras"] = step1.siteWorks.cameras
+  sample["temporaryFence"] = step1.siteWorks.temporaryFence
+  sample["homeProject"] = step1.houseDesignAndProject.homeProject
+  sample["designProject"] = step1.houseDesignAndProject.designProject
 
 def step2_to_df (sample, step2):
   sample["foundationType"] = step2.foundationType
@@ -527,7 +527,7 @@ def code_steps_to_df (sample, steps_info):
 
 
 def sitePreparation_to_proto (predict):
-  return step_recomendation_pb2.SitePreparation(
+  return sr_pb2.SitePreparation(
     siteChoosing = predict["siteChoosing"],
     geologicalWorks = predict["geologicalWorks"],
     geodeticalWorks = predict["geodeticalWorks"],
@@ -535,40 +535,180 @@ def sitePreparation_to_proto (predict):
     clearingTheSiteOfDebris = predict["clearingTheSiteOfDebris"])
 
 def siteWorks_to_proto (predict):
-  return step_recomendation_pb2.SiteWorks(
+  return sr_pb2.SiteWorks(
     cameras = predict["cameras"],
     temporaryFence = predict["temporaryFence"]
   )
 
 def houseDesignAndProject_to_proto (predict):
-  return step_recomendation_pb2.HouseDesignAndProject(
+  return sr_pb2.HouseDesignAndProject(
     homeProject = predict["homeProject"],
     designProject = predict["designProject"]
   )
 
 def step1_to_proto(predict):
-  return step_recomendation_pb2.Step1Response(step1 = step_recomendation_pb2.Step1(sitePreparation = sitePreparation_to_proto(predict), 
+  return sr_pb2.Step1Response(step1 = sr_pb2.Step1(sitePreparation = sitePreparation_to_proto(predict), 
                                                                     siteWorks = siteWorks_to_proto(predict),
                                                                     houseDesignAndProject = houseDesignAndProject_to_proto(predict)))
 
+def step2_to_proto(predict):
+  return sr_pb2.Step2Response(step2 = sr_pb2.Step2(foundationType = predict["foundationType"]))
 
+def step3_to_proto(predict):
+  return sr_pb2.Step3Response(step3 = sr_pb2.Step3(wallsMaterial = predict["wallsMaterial"]))
 
-class Recomendation_system(step_recomendation_pb2_grpc.Recomendation_systemServicer):
+def step4_to_proto(predict):
+  return sr_pb2.Step4Response(step4 = sr_pb2.Step4(slopesNumber = predict["slopesNumber"], roofType = predict["roofType"]))
+
+def step5_to_proto(predict):
+  return sr_pb2.Step5Response(step5 = sr_pb2.Step5(facadeTechnology = predict["facadeTechnology"]))
+
+def step6_to_proto(predict):
+  return sr_pb2.Step6Response(step6 = sr_pb2.Step6(windowMaterial = predict["windowMaterial"], 
+                                                   windowType = predict["windowType"],
+                                                   doorMaterial = predict["doorMaterial"]))
+
+def electrician_to_proto (predict):
+  return sr_pb2.Electrician(
+    plasticBoxesUpTo40mmWide = predict["plasticBoxesUpTo40mmWide"],
+    layingAThreeToFive = predict["layingAThreeToFive"],
+    cableLaying = predict["cableLaying"],
+    installationOfTwoKey = predict["installationOfTwoKey"],
+    installationOfSingleKey = predict["installationOfSingleKey"],
+    recessedTypeSocketDevice = predict["recessedTypeSocketDevice"],
+    installationOfPendant = predict["installationOfPendant"],
+    chandeliersAndPendants = predict["chandeliersAndPendants"]
+  )
+
+def waterSupply_to_proto (predict):
+  return sr_pb2.WaterSupply(
+    layingOfInternalWaterSupplyPipelines = predict["layingOfInternalWaterSupplyPipelines"],
+    installationOfBathtubs = predict["installationOfBathtubs"],
+    installationOfSingle = predict["installationOfSingle"],
+    installationOfMixers = predict["installationOfMixers"]
+  )
+
+def sewerage_to_proto (predict):
+  return sr_pb2.Sewerage(
+    installationOfToilet = predict["installationOfToilet"],
+    layingOfSewerage50mm = predict["layingOfSewerage50mm"],
+    layingOfSewerage110mm = predict["layingOfSewerage110mm"]
+  )
+
+def heating_to_proto (predict):
+  return sr_pb2.Heating(
+    assemblyOfAWaterSupply = predict["assemblyOfAWaterSupply"],
+    layingOfInternalHeatingPipelines = predict["layingOfInternalHeatingPipelines"],
+    installationOfWindowFixtures = predict["installationOfWindowFixtures"]
+  )
+
+def ventilation_to_proto (predict):
+  return sr_pb2.Ventilation(
+    installationOfSplitSystems = predict["installationOfSplitSystems"],
+    cablingOnABrickWall = predict["cablingOnABrickWall"]
+  )
+
+def step7_to_proto(predict):
+  return sr_pb2.Step7Response(step7 = sr_pb2.Step7(electrician = electrician_to_proto(predict), 
+                                                   waterSupply = waterSupply_to_proto(predict),
+                                                   sewerage = sewerage_to_proto(predict),
+                                                   heating = heating_to_proto(predict),
+                                                   ventilation = ventilation_to_proto(predict)
+                                                   ))
+
+def step8_to_proto(predict):
+  return sr_pb2.Step8Response(step8 = sr_pb2.Step8(warmFloor = predict["warmFloor"], 
+                                                   ladderMaterial = predict["ladderMaterial"]
+                                                   ))
+
+def step9_to_proto(predict):
+  return sr_pb2.Step9Response(step9 = sr_pb2.Step9(wallDecoration = predict["wallDecoration"], 
+                                                   floorCovering = predict["floorCovering"],
+                                                   ceilCovering = predict["ceilCovering"]
+                                                   ))
+# def step2_to_proto(predict):
+#   return sr_pb2.Step2Response(step2 = sr_pb2.Step2(foundationType = predict["foundationType"]))
+
+def get_steps_info(request, step_number):
+  steps_info = []
+  for i in range(step_number):
+    match i:
+      case 0:
+        steps_info.append(request.step0) 
+      case 1:
+        steps_info.append(request.step1) 
+      case 2:
+        steps_info.append(request.step2) 
+      case 3:
+        steps_info.append(request.step3) 
+      case 4:
+        steps_info.append(request.step4) 
+      case 5:
+        steps_info.append(request.step5) 
+      case 6:
+        steps_info.append(request.step6) 
+      case 7:
+        steps_info.append(request.step7) 
+      case 8:
+        steps_info.append(request.step8) 
+      case 9:
+        steps_info.append(request.step9) 
+  return steps_info
+
+stepx_to_proto = [step1_to_proto, step2_to_proto, step3_to_proto, step4_to_proto, step5_to_proto, 
+                  step6_to_proto, step7_to_proto, step8_to_proto, step9_to_proto]
+
+def recomend_stepx(self, request, context, x):
+    sample = get_default_sample(train_df_encoded_by_columns)
+    steps_info = get_steps_info(request, x)
+    code_steps_to_df(sample, steps_info)
+
+    predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, x)
+    print(type(predict))
+    print(predict)
+    return stepx_to_proto[x-1](predict)
+
+class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):    
     def recomend_step1(self, request, context):
-        sample = get_default_sample(train_df_encoded_by_columns)
-        
-        steps_info = [request.step0]
-        code_steps_to_df(sample, steps_info)
+      return recomend_stepx(self, request, context, 1)
+        # sample = get_default_sample(train_df_encoded_by_columns)
+        # steps_info = get_steps_info(request, 1)
+        # code_steps_to_df(sample, steps_info)
 
-        predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 1)
-        print(type(predict))
-        print(predict)
-        return step1_to_proto(predict)
+        # predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 1)
+        # print(type(predict))
+        # print(predict)
+        # return step1_to_proto(predict)
+    def recomend_step2(self, request, context):
+      return recomend_stepx(self, request, context, 2)
+        # sample = get_default_sample(train_df_encoded_by_columns)
+        
+        # steps_info = [request.step0, request.step1]
+        # code_steps_to_df(sample, steps_info)
+
+        # predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 2)
+        # print(type(predict))
+        # print(predict)
+        # return step2_to_proto(predict)
+    def recomend_step3(self, request, context):
+      return recomend_stepx(self, request, context, 3)
+    def recomend_step4(self, request, context):
+      return recomend_stepx(self, request, context, 4)
+    def recomend_step5(self, request, context):
+      return recomend_stepx(self, request, context, 5)
+    def recomend_step6(self, request, context):
+      return recomend_stepx(self, request, context, 6)
+    def recomend_step7(self, request, context):
+      return recomend_stepx(self, request, context, 7)
+    def recomend_step8(self, request, context):
+      return recomend_stepx(self, request, context, 8)
+    def recomend_step9(self, request, context):
+      return recomend_stepx(self, request, context, 9)
 
 def serve():
     port = "50051"
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    step_recomendation_pb2_grpc.add_Recomendation_systemServicer_to_server(Recomendation_system(), server)
+    sr_pb2_grpc.add_Recomendation_systemServicer_to_server(Recomendation_system(), server)
     server.add_insecure_port("[::]:" + port)
     server.start()
     print("Server started, listening on " + port)

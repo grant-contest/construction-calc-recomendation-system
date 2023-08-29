@@ -17,7 +17,7 @@ DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18step_recomenda
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'step_recomendation_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'sr_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
