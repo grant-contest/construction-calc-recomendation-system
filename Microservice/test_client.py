@@ -3,9 +3,12 @@ from __future__ import print_function
 import logging
 
 import grpc
-import step_recomendation_pb2 as sr_pb2
-import step_recomendation_pb2_grpc as sr_pb2_grpc
 
+import sys
+sys.path.append('proto/')
+
+import proto.step_recomendation_pb2 as sr_pb2
+import proto.step_recomendation_pb2_grpc as sr_pb2_grpc
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
@@ -62,7 +65,6 @@ def run():
         
         for i in range(len(responses)):
             if responses[i] != None:
-                # print(f"step %d:" % (i), responses[i])
                 print( responses[i])
 
 

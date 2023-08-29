@@ -429,8 +429,14 @@ from concurrent import futures
 import logging
 
 import grpc
-import step_recomendation_pb2 as sr_pb2
-import step_recomendation_pb2_grpc as sr_pb2_grpc
+# import proto.step_recomendation_pb2 as sr_pb2
+# import proto.step_recomendation_pb2_grpc as sr_pb2_grpc
+
+import sys
+sys.path.append('proto/')
+
+import proto.step_recomendation_pb2 as sr_pb2
+import proto.step_recomendation_pb2_grpc as sr_pb2_grpc
 
 sample = get_default_sample(train_df_encoded_by_columns)
 
@@ -626,9 +632,6 @@ def step9_to_proto(predict):
                                                    floorCovering = predict["floorCovering"],
                                                    ceilCovering = predict["ceilCovering"]
                                                    ))
-# def step2_to_proto(predict):
-#   return sr_pb2.Step2Response(step2 = sr_pb2.Step2(foundationType = predict["foundationType"]))
-
 def get_steps_info(request, step_number):
   steps_info = []
   for i in range(step_number):
@@ -671,25 +674,8 @@ def recomend_stepx(self, request, context, x):
 class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):    
     def recomend_step1(self, request, context):
       return recomend_stepx(self, request, context, 1)
-        # sample = get_default_sample(train_df_encoded_by_columns)
-        # steps_info = get_steps_info(request, 1)
-        # code_steps_to_df(sample, steps_info)
-
-        # predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 1)
-        # print(type(predict))
-        # print(predict)
-        # return step1_to_proto(predict)
     def recomend_step2(self, request, context):
       return recomend_stepx(self, request, context, 2)
-        # sample = get_default_sample(train_df_encoded_by_columns)
-        
-        # steps_info = [request.step0, request.step1]
-        # code_steps_to_df(sample, steps_info)
-
-        # predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, 2)
-        # print(type(predict))
-        # print(predict)
-        # return step2_to_proto(predict)
     def recomend_step3(self, request, context):
       return recomend_stepx(self, request, context, 3)
     def recomend_step4(self, request, context):
