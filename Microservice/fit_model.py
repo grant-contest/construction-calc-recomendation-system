@@ -35,7 +35,7 @@ def ladderMaterialRestriction (floorCount, foundationType):
     return "-"
   if foundationType in {"Свайный", "Столбчатый"}:
     return np.random.choice(["Дерево", "Металл"])
-  return np.random.choice(["-", "Дерево", "Бетон", "Металл"])
+  return np.random.choice(["Дерево", "Бетон", "Металл"])
 
 def foundationTypeRestriction(floorCount):
   if floorCount == 3:
@@ -112,7 +112,7 @@ def generate_df(n_rows):
   "layingOfInternalWaterSupplyPipelines": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
   "installationOfBathtubs": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
   "installationOfSingle": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfMixer": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
+  "installationOfMixers": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
 
   # sewerage
   "installationOfToilet": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
@@ -183,7 +183,7 @@ steps[5] = {"facadeTechnology"}
 steps[6] = {"windowMaterial", "windowType", "doorMaterial"}
 steps[7] = {"plasticBoxesUpTo40mmWide", "layingAThreeToFive", "cableLaying", "installationOfTwoKey", "installationOfSingleKey",
             "recessedTypeSocketDevice", "installationOfPendant", "chandeliersAndPendants", "layingOfInternalWaterSupplyPipelines",
-            "installationOfBathtubs", "installationOfSingle", "installationOfMixer", "installationOfToilet", "layingOfSewerage50mm",
+            "installationOfBathtubs", "installationOfSingle", "installationOfMixers", "installationOfToilet", "layingOfSewerage50mm",
             "layingOfSewerage110mm", "assemblyOfAWaterSupply", "layingOfInternalHeatingPipelines", "installationOfWindowFixtures",
             "installationOfSplitSystems", "cablingOnABrickWall"}
 steps[8] = {"warmFloor", "ladderMaterial"}
@@ -250,7 +250,7 @@ cols_sparse = [
     "layingOfInternalWaterSupplyPipelines",
     "installationOfBathtubs",
     "installationOfSingle",
-    "installationOfMixer",
+    "installationOfMixers",
 
     # sewerage
     "installationOfToilet",
