@@ -1,0 +1,5 @@
+.venv
+Microservice/grpc
+__*
+factorization.ipynb
+factorization.py

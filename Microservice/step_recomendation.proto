@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+service Recomendation_system {
+  // Sends a greeting
+  rpc recomend_step1 (Step1Request) returns (Step1Response) {}
+}
+
+// message Step0 {
+//     uint32 houseArea = 1;
+//     uint32 siteArea = 2;
+//     uint32 floorCount = 3;
+//     string region = 4;
+//     uint32 budgetFloor = 5;
+//     uint32 budgetCeil = 6;
+// }
+
+message Step1Request {
+//   Step0 step0 = 1;
+
+    uint32 houseArea = 1;
+    uint32 siteArea = 2;
+    uint32 floorCount = 3;
+    string region = 4;
+    uint32 budgetFloor = 5;
+    uint32 budgetCeil = 6;
+}
+
+// The response message containing the greetings
+message Step1Response {
+  string message = 1;
+}
