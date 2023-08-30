@@ -138,31 +138,6 @@ def generate_df(n_rows):
   "floorCovering": [np.random.choice(["Ламинат", "Линолеум"]) for i in range(n_rows)],
   "ceilCovering": [np.random.choice(["Натяжной потолок", "Окраска", "Обои", "Штукатурка"]) for i in range(n_rows)]
   })
-  # restrictions:
-
-  # 1.
-  # Step 2 ("Свайный"): -> step 3 ("Дерево" or "Каркас")
-  # Step 2 ("Столбчатый"): -> step 3 ("Дерево" or "Каркас")
-  # Step 2 ("Ленточный"): -> step 3 (*)
-  # Step 2 ("Плитный"): -> step 3 (*)
-
-  # 2.
-  # Step 3 ("Каркас"): -> step 5 ("Панели (сайдинг)" or "Облицовка кирпичом" or "Искусственный камень")
-  # Step 3 ("Дерево"): -> step 5 ("Без отделки" or "Панели (сайдинг)")
-  # Step 3 ("Кирпич"): -> step 5 ("Без отделки")
-  # Step 3 ("Легкий бетон"): -> step 5 (*)
-
-  # 3.
-  # Step 0 ("floorCount" == 1) -> step 8 ("ladderMaterial" = "-")
-
-  # 4.
-  # Step 0 ("floorCount" == 3) -> step 2 ("Ленточный" or "Плитный")
-
-  # 5.
-  # step 2 ("Свайный") -> step 8 ("ladderMaterial" = {"Дерево", "Металл"})
-  # step 2 ("Столбчатый") -> step 8 ("ladderMaterial" = {"Дерево", "Металл"})
-  # step 2 ("Ленточный") -> step 8 ("ladderMaterial" = *)
-  # step 2 ("Плитный") -> step 8 ("ladderMaterial" = *)
 
   return df
 train_test_quotient = 1
@@ -384,6 +359,38 @@ def get_feature_cols (all_columns, feature):
         cols.add(col)
   return cols
 
+def apply_restrictions(sample, cols, step_number, feature):
+  cols_copy = cols.copy()
+  print("Before restrictions: ", cols)
+  for col in cols_copy:
+    cols.remove(col)
+    cols.add(col[len(feature)+1:])
+  # print(type(sample["floorCount"][1]))
+  # print(sample["floorCount"][1])
+  if step_number == 3 and sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
+    cols = {"Дерево","Каркас"}
+  if step_number == 5:
+    match sample["wallsMaterial"].item():
+      case "Каркас":
+        cols = {"Панели (сайдинг)", "Облицовка кирпичом", "Искусственный камень"}
+      case "Дерево":
+        cols = {"Без отделки", "Панели (сайдинг)"}
+      case "Кирпич":
+        cols = {"Без отделки"}
+  if step_number == 8:
+    if sample["floorCount"].item() == 1:
+      cols = {"-"}
+    if sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
+      cols = {"Дерево", "Металл"}
+  if step_number == 2 and (sample["floorCount"].item() == 3):
+    cols = {"Ленточный", "Плитный"}
+  cols_copy = cols.copy()
+  for col in cols_copy:
+    cols.remove(col)
+    cols.add(feature + '_' + col)
+  print("After restrictions: ", cols)
+  return cols
+
 def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_number):
   sample_enc = encode_by_column(sample, columns_values_map)
   df_enc_np = np.append(df_enc_np, encode_by_column(sample, columns_values_map), axis=0)
@@ -395,10 +402,13 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
   predicted_sample_df = pd.DataFrame([X_pred[-1]], columns=columns)
 
   predicts = {}
-  # match step_number:
-  #   case 1:
-  for feature in steps[step_number]:
+  # features = apply_restrictions(sample, steps[step_number].copy(), step_number)
+  features = steps[step_number]
+  for feature in features:
     cols = get_feature_cols(columns, feature)
+    # print("Before restrictions: ", cols)
+    # print("After restrictions: ", features)
+    cols = apply_restrictions(sample, cols, step_number, feature)
     col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
     predicts[feature] = col_name_of_max.iloc[0][len(feature)+1:]
 

@@ -18,7 +18,7 @@ def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = sr_pb2_grpc.Recomendation_systemStub(channel)
 
-        step0 = sr_pb2.Step0(houseArea = 1, siteArea = 1, floorCount = 2, region = 'Адыгея', budgetFloor = 100_000, budgetCeil = 1_000_000)
+        step0 = sr_pb2.Step0(houseArea = 1, siteArea = 1, floorCount = 3, region = 'Адыгея', budgetFloor = 100_000, budgetCeil = 1_000_000)
         step1 = sr_pb2.Step1(sitePreparation = sr_pb2.SitePreparation(siteChoosing = True, geologicalWorks = True, 
                                                                       geodeticalWorks = True, cuttingBushesAndSmallForests = True,
                                                                       clearingTheSiteOfDebris = True),
