@@ -59,6 +59,7 @@ def generate_df(n_rows):
   "siteArea": [float(random.randint(0, 100)) for i in range(n_rows)],
   "floorCount": floorCounts,
   "region": [np.random.choice(regions) for i in range(n_rows)],
+  "purpose": [np.random.choice(["Постоянное место жительства", "Место отдыха, 'Дача'", "Место работы"]) for i in range(n_rows)],
   "budgetFloor": [float(random.randint(500_000, 5_000_000)) for i in range(n_rows)],
   "budgetCeil": [float(random.randint(5_000_000, 25_000_000)) for i in range(n_rows)],
 
@@ -149,7 +150,7 @@ test_sample = generate_df(1)
 
 steps_quantity = 10
 steps = [None] * steps_quantity
-steps[0] = {"houseArea", "siteArea", "floorCount", "region", "budgetFloor", "budgetCeil"}
+steps[0] = {"houseArea", "siteArea", "floorCount", "region", "purpose", "budgetFloor", "budgetCeil"}
 steps[1] = {"siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris", "cameras", "temporaryFence", "homeProject", "designProject"}
 steps[2] = {"foundationType"}
 steps[3] = {"wallsMaterial"}
@@ -177,6 +178,7 @@ cols_dense = [
 cols_sparse = [
     # step 0
     "region",
+    "purpose",
 
     # step 1
     # sitePreparation
@@ -288,15 +290,6 @@ def rmse(prediction, ground_truth):
     ground_truth = ground_truth[ground_truth.nonzero()].flatten()
 
     return sqrt(mean_squared_error(prediction, ground_truth))
-
-"""Используем метод разложения, который называется **singular value decomposition** (SVD, cингулярное разложение). Смысл этого разложения в том, что исходную матрицу $X$ мы разбиваем на произведение ортогональных матриц $U$ и $V^T$ и диагональной матрицы $S$.
-
-$$ X = UV^TS $$
-
-В нашем случае $X$ – разреженная (состоящая преимущественно из нулей) user-item матрица. Разложив её на компоненты, мы можем их вновь перемножить и получить "восстановленную" матрицу $\hat{X}$. Матрица $\hat{X}$ и будет являться нашим предсказанием – метод SVD сделал сам за нас всё работу и заполнил пропуски в исходной матрице $X$
-
-$$ UV^TS \approx \hat{X}$$
-"""
 
 import scipy.sparse as sp
 from scipy.sparse.linalg import svds
@@ -451,6 +444,7 @@ def step0_to_df (sample, step0):
   sample["siteArea"] = step0.siteArea
   sample["floorCount"] = step0.floorCount
   sample["region"] = step0.region
+  sample["purpose"] = step0.purpose
   sample["budgetFloor"] = step0.budgetFloor
   sample["budgetCeil"] = step0.budgetCeil
 
@@ -695,6 +689,8 @@ class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):
       return recomend_stepx(self, request, context, 8)
     def recomend_step9(self, request, context):
       return recomend_stepx(self, request, context, 9)
+
+print(train_df["purpose"])
 
 def serve():
     port = "50051"

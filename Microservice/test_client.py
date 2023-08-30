@@ -14,7 +14,7 @@ def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    print("Will try to greet world ...")
+    print("Will try to get recomendations!")
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = sr_pb2_grpc.Recomendation_systemStub(channel)
 

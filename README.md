@@ -1,11 +1,14 @@
 # Рекомендательная система проекта для стипендиального конкурса от РСХБ 2023
 # Шаги для запуска проекта:
  
-1. Генерация grpc-файлов для микросервиса: запуск из папки Microservice
-python -m grpc_tools.protoc -I. --python_out=grpc --pyi_out=grpc --grpc_python_out=grpc step_recomendation.proto
+1. Установка всех зависимостей (из корня):
+pip install -r requirements.txt
 
-2. Запуск сервера из папки Microservice:
+2. Генерация grpc-файлов для микросервиса (запуск из папки Microservice):
+python -m grpc_tools.protoc -I. --python_out=proto --pyi_out=proto --grpc_python_out=proto step_recomendation.proto
+
+3. Запуск сервера (из папки Microservice):
 python server.py
 
-3. Запуск клиента для тестирования сервера из папки Microservice:
+4. Запуск клиента для тестирования сервера (из папки Microservice):
 python server.py

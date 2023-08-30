@@ -5,20 +5,22 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class Step0(_message.Message):
-    __slots__ = ["houseArea", "siteArea", "floorCount", "region", "budgetFloor", "budgetCeil"]
+    __slots__ = ["houseArea", "siteArea", "floorCount", "region", "purpose", "budgetFloor", "budgetCeil"]
     HOUSEAREA_FIELD_NUMBER: _ClassVar[int]
     SITEAREA_FIELD_NUMBER: _ClassVar[int]
     FLOORCOUNT_FIELD_NUMBER: _ClassVar[int]
     REGION_FIELD_NUMBER: _ClassVar[int]
+    PURPOSE_FIELD_NUMBER: _ClassVar[int]
     BUDGETFLOOR_FIELD_NUMBER: _ClassVar[int]
     BUDGETCEIL_FIELD_NUMBER: _ClassVar[int]
     houseArea: int
     siteArea: int
     floorCount: int
     region: str
+    purpose: str
     budgetFloor: int
     budgetCeil: int
-    def __init__(self, houseArea: _Optional[int] = ..., siteArea: _Optional[int] = ..., floorCount: _Optional[int] = ..., region: _Optional[str] = ..., budgetFloor: _Optional[int] = ..., budgetCeil: _Optional[int] = ...) -> None: ...
+    def __init__(self, houseArea: _Optional[int] = ..., siteArea: _Optional[int] = ..., floorCount: _Optional[int] = ..., region: _Optional[str] = ..., purpose: _Optional[str] = ..., budgetFloor: _Optional[int] = ..., budgetCeil: _Optional[int] = ...) -> None: ...
 
 class SitePreparation(_message.Message):
     __slots__ = ["siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris"]

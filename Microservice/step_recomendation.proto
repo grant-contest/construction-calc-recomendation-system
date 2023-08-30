@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 service Recomendation_system {
-  // Sends a greeting
   rpc recomend_step1 (Step1Request) returns (Step1Response) {}
   rpc recomend_step2 (Step2Request) returns (Step2Response) {}
   rpc recomend_step3 (Step3Request) returns (Step3Response) {}
@@ -18,8 +17,9 @@ message Step0 {
   uint32 siteArea = 2;
   uint32 floorCount = 3;
   string region = 4;
-  uint32 budgetFloor = 5;
-  uint32 budgetCeil = 6;
+  string purpose = 5;
+  uint32 budgetFloor = 6;
+  uint32 budgetCeil = 7;
 }
 
 message SitePreparation {
@@ -122,11 +122,6 @@ message Step9 {
   string floorCovering = 2;
   string ceilCovering = 3;
 }
-
-
-
-
-
 
 message Step1Request {
   Step0 step0 = 1;
