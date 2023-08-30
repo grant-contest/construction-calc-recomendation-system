@@ -365,8 +365,6 @@ def apply_restrictions(sample, cols, step_number, feature):
   for col in cols_copy:
     cols.remove(col)
     cols.add(col[len(feature)+1:])
-  # print(type(sample["floorCount"][1]))
-  # print(sample["floorCount"][1])
   if step_number == 3 and sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
     cols = {"Дерево","Каркас"}
   if step_number == 5:
@@ -377,7 +375,7 @@ def apply_restrictions(sample, cols, step_number, feature):
         cols = {"Без отделки", "Панели (сайдинг)"}
       case "Кирпич":
         cols = {"Без отделки"}
-  if step_number == 8:
+  if step_number == 8 and feature == "ladderMaterial":
     if sample["floorCount"].item() == 1:
       cols = {"-"}
     if sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
@@ -406,8 +404,6 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
   features = steps[step_number]
   for feature in features:
     cols = get_feature_cols(columns, feature)
-    # print("Before restrictions: ", cols)
-    # print("After restrictions: ", features)
     cols = apply_restrictions(sample, cols, step_number, feature)
     col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
     predicts[feature] = col_name_of_max.iloc[0][len(feature)+1:]
@@ -677,7 +673,6 @@ def recomend_stepx(self, request, context, x):
     code_steps_to_df(sample, steps_info)
 
     predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, x)
-    print(type(predict))
     print(predict)
     return stepx_to_proto[x-1](predict)
 
