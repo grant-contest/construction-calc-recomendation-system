@@ -396,7 +396,7 @@ def apply_restrictions(sample, cols, step_number, feature):
   print("After restrictions: ", cols)
   return cols
 
-def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_number):
+def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_number, top):
   sample_enc = encode_by_column(sample, columns_values_map)
   df_enc_np = np.append(df_enc_np, encode_by_column(sample, columns_values_map), axis=0)
 
@@ -412,9 +412,17 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
   for feature in features:
     cols = get_feature_cols(columns, feature)
     cols = apply_restrictions(sample, cols, step_number, feature)
-    col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
-    predicts[feature] = col_name_of_max.iloc[0][len(feature)+1:]
+    if top == 1:
+      col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
+      predicts[feature] = col_name_of_max.iloc[0][len(feature)+1:]
+    if top == 3:
+      tops = []
+      for i in range(top):
+        col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
+        tops.append(col_name_of_max.iloc[0][len(feature)+1:])
+        predicted_sample_df.drop(columns = [col_name_of_max.iloc[0]])
 
+      predicts[feature] = tops
   for key, value in predicts.items():
     if len(value) > 1 and (value[0] == '1' or value[0] == '0'):
       if float(value) == 0.:
@@ -652,7 +660,9 @@ def step9_to_proto(predict):
                                                    ))
 
 def step_final_to_proto(predict):
-  return sr_pb2.FinalResponse(stepFinal = sr_pb2.StepFinal(additionalBuildings = predict["additionalBuildings"]
+  return sr_pb2.FinalResponse(stepFinal = sr_pb2.StepFinal(additionalBuildings1 = predict["additionalBuildings"][0],
+                                                           additionalBuildings2 = predict["additionalBuildings"][1],
+                                                           additionalBuildings3 = predict["additionalBuildings"][2],
                                                    ))
 
 
@@ -689,9 +699,12 @@ def recomend_stepx(self, request, context, x):
     sample = get_default_sample(train_df_encoded_by_columns)
     steps_info = get_steps_info(request, x)
     code_steps_to_df(sample, steps_info)
-
-    predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, x)
+    top = 1
+    if x == 10:
+      top = 3
+    predict = step_predict(train_df_encoded_by_columns_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, x, top)
     print(predict)
+    # if top == 1:
     return stepx_to_proto[x-1](predict)
 
 class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):    

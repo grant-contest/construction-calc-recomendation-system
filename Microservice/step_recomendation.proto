@@ -152,7 +152,9 @@ message Step9 {
 }
 
 message StepFinal {
-  string additionalBuildings = 1;
+  string additionalBuildings1 = 1;
+  string additionalBuildings2 = 2;
+  string additionalBuildings3 = 3;
 }
 
 message Step1Request {

@@ -227,10 +227,14 @@ class Step9(_message.Message):
     def __init__(self, wallDecoration: _Optional[str] = ..., floorCovering: _Optional[str] = ..., ceilCovering: _Optional[str] = ...) -> None: ...
 
 class StepFinal(_message.Message):
-    __slots__ = ["additionalBuildings"]
-    ADDITIONALBUILDINGS_FIELD_NUMBER: _ClassVar[int]
-    additionalBuildings: str
-    def __init__(self, additionalBuildings: _Optional[str] = ...) -> None: ...
+    __slots__ = ["additionalBuildings1", "additionalBuildings2", "additionalBuildings3"]
+    ADDITIONALBUILDINGS1_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONALBUILDINGS2_FIELD_NUMBER: _ClassVar[int]
+    ADDITIONALBUILDINGS3_FIELD_NUMBER: _ClassVar[int]
+    additionalBuildings1: str
+    additionalBuildings2: str
+    additionalBuildings3: str
+    def __init__(self, additionalBuildings1: _Optional[str] = ..., additionalBuildings2: _Optional[str] = ..., additionalBuildings3: _Optional[str] = ...) -> None: ...
 
 class Step1Request(_message.Message):
     __slots__ = ["step0"]
