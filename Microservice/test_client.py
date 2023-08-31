@@ -45,7 +45,7 @@ def run():
         # step7 = sr_pb2.Step7(windowMaterial = "Деревянные" 
 
 
-        responses = [None] * 9
+        responses = [None] * 10
         responses[0] = stub.recomend_step1(sr_pb2.Step1Request(step0 = step0))
         responses[1] = stub.recomend_step2(sr_pb2.Step2Request(step0 = step0, step1 = step1))
         responses[2] = stub.recomend_step3(sr_pb2.Step3Request(step0 = step0, step1 = step1, step2 = step2))
@@ -55,6 +55,7 @@ def run():
         responses[6] = stub.recomend_step7(sr_pb2.Step7Request(step0 = step0, step1 = step1, step2 = step2, step3 = step3, step4 = step4, step5 = step5, step6 = step6))
         responses[7] = stub.recomend_step8(sr_pb2.Step8Request(step0 = step0, step1 = step1, step2 = step2, step3 = step3, step4 = step4, step5 = step5, step6 = step6, step7 = step7))
         responses[8] = stub.recomend_step9(sr_pb2.Step9Request(step0 = step0, step1 = step1, step2 = step2, step3 = step3, step4 = step4, step5 = step5, step6 = step6, step7 = step7, step8 = step8))
+        responses[9] = stub.recomend_final(sr_pb2.FinalRequest(step0 = step0, step1 = step1, step2 = step2, step3 = step3, step4 = step4, step5 = step5, step6 = step6, step7 = step7, step8 = step8, step9 = step9))
 
         print("Greeter client received: ")
 

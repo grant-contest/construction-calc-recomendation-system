@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import additional_buildings
 
 data_path = "Data/"
 
@@ -48,6 +48,12 @@ def any_to_0_1(a):
   else:
     return 0.
 
+
+add_buildings_db = additional_buildings.init_additional_buildings_db()
+add_buildings_names = []
+for key, value in add_buildings_db.items():
+  add_buildings_names.append(key)
+print(add_buildings_names)
 def generate_df(n_rows):
   floorCounts = [(float(random.randint(1, 3))) for i in range(n_rows)]
   foundationTypes = [foundationTypeRestriction(floorCounts[i]) for i in range(n_rows)]
@@ -130,14 +136,18 @@ def generate_df(n_rows):
   "installationOfSplitSystems": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
   "cablingOnABrickWall": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
 
-  #step 8
+  # step 8
   "warmFloor": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
   "ladderMaterial": [ladderMaterialRestriction(floorCounts[i], foundationTypes[i]) for i in range(n_rows)],
 
-  #step 9
+  # step 9
   "wallDecoration": [np.random.choice(["Декоративная штукатурка", "Покраска", "Обои", "Плитка"]) for i in range(n_rows)],
   "floorCovering": [np.random.choice(["Ламинат", "Линолеум"]) for i in range(n_rows)],
-  "ceilCovering": [np.random.choice(["Натяжной потолок", "Окраска", "Обои", "Штукатурка"]) for i in range(n_rows)]
+  "ceilCovering": [np.random.choice(["Натяжной потолок", "Окраска", "Обои", "Штукатурка"]) for i in range(n_rows)],
+
+  # final
+  "additionalBuildings": [np.random.choice(add_buildings_names) for i in range(n_rows)],
+
   })
 
   return df
@@ -148,7 +158,7 @@ test_sample = generate_df(1)
 
 # val_df = generate_df(int(n_rows * 0.2 * 0.2))
 
-steps_quantity = 10
+steps_quantity = 11
 steps = [None] * steps_quantity
 steps[0] = {"houseArea", "siteArea", "floorCount", "region", "purpose", "budgetFloor", "budgetCeil"}
 steps[1] = {"siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris", "cameras", "temporaryFence", "homeProject", "designProject"}
@@ -164,6 +174,7 @@ steps[7] = {"plasticBoxesUpTo40mmWide", "layingAThreeToFive", "cableLaying", "in
             "installationOfSplitSystems", "cablingOnABrickWall"}
 steps[8] = {"warmFloor", "ladderMaterial"}
 steps[9] = {"wallDecoration", "floorCovering", "ceilCovering"}
+steps[10] = {"additionalBuildings"}
 
 
 
@@ -250,7 +261,10 @@ cols_sparse = [
     #step 9
     "wallDecoration",
     "floorCovering",
-    "ceilCovering"
+    "ceilCovering",
+    
+    # final
+    "additionalBuildings",
     ]
 
 assert len(train_df.columns) == len(cols_dense) + len(cols_sparse)
@@ -523,14 +537,18 @@ def step9_to_df (sample, step9):
   sample["floorCovering"] = step9.floorCovering
   sample["ceilCovering"] = step9.ceilCovering
 
+def step_final_to_df (sample, step_final):
+  sample["additionalBuildings"] = step_final.additionalBuildings
+
+
 steps_to_df = [step0_to_df, step1_to_df, step2_to_df,
                step3_to_df, step4_to_df, step5_to_df,
                step6_to_df, step7_to_df, step8_to_df,
-               step9_to_df]
+               step9_to_df, step_final_to_df]
+
 def code_steps_to_df (sample, steps_info):
   for i in range(len(steps_info)):
     steps_to_df[i](sample, steps_info[i])
-
 
 def sitePreparation_to_proto (predict):
   return sr_pb2.SitePreparation(
@@ -632,6 +650,12 @@ def step9_to_proto(predict):
                                                    floorCovering = predict["floorCovering"],
                                                    ceilCovering = predict["ceilCovering"]
                                                    ))
+
+def step_final_to_proto(predict):
+  return sr_pb2.FinalResponse(stepFinal = sr_pb2.StepFinal(additionalBuildings = predict["additionalBuildings"]
+                                                   ))
+
+
 def get_steps_info(request, step_number):
   steps_info = []
   for i in range(step_number):
@@ -659,7 +683,7 @@ def get_steps_info(request, step_number):
   return steps_info
 
 stepx_to_proto = [step1_to_proto, step2_to_proto, step3_to_proto, step4_to_proto, step5_to_proto, 
-                  step6_to_proto, step7_to_proto, step8_to_proto, step9_to_proto]
+                  step6_to_proto, step7_to_proto, step8_to_proto, step9_to_proto, step_final_to_proto]
 
 def recomend_stepx(self, request, context, x):
     sample = get_default_sample(train_df_encoded_by_columns)
@@ -689,6 +713,8 @@ class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):
       return recomend_stepx(self, request, context, 8)
     def recomend_step9(self, request, context):
       return recomend_stepx(self, request, context, 9)
+    def recomend_final(self, request, context):
+      return recomend_stepx(self, request, context, 10)
 
 print(train_df["purpose"])
 

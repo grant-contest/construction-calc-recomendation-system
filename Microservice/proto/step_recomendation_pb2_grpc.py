@@ -59,6 +59,11 @@ class Recomendation_systemStub(object):
                 request_serializer=step__recomendation__pb2.Step9Request.SerializeToString,
                 response_deserializer=step__recomendation__pb2.Step9Response.FromString,
                 )
+        self.recomend_final = channel.unary_unary(
+                '/Recomendation_system/recomend_final',
+                request_serializer=step__recomendation__pb2.FinalRequest.SerializeToString,
+                response_deserializer=step__recomendation__pb2.FinalResponse.FromString,
+                )
 
 
 class Recomendation_systemServicer(object):
@@ -118,6 +123,12 @@ class Recomendation_systemServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def recomend_final(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_Recomendation_systemServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -165,6 +176,11 @@ def add_Recomendation_systemServicer_to_server(servicer, server):
                     servicer.recomend_step9,
                     request_deserializer=step__recomendation__pb2.Step9Request.FromString,
                     response_serializer=step__recomendation__pb2.Step9Response.SerializeToString,
+            ),
+            'recomend_final': grpc.unary_unary_rpc_method_handler(
+                    servicer.recomend_final,
+                    request_deserializer=step__recomendation__pb2.FinalRequest.FromString,
+                    response_serializer=step__recomendation__pb2.FinalResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -326,5 +342,22 @@ class Recomendation_system(object):
         return grpc.experimental.unary_unary(request, target, '/Recomendation_system/recomend_step9',
             step__recomendation__pb2.Step9Request.SerializeToString,
             step__recomendation__pb2.Step9Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def recomend_final(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Recomendation_system/recomend_final',
+            step__recomendation__pb2.FinalRequest.SerializeToString,
+            step__recomendation__pb2.FinalResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -37,34 +37,52 @@ class Step0(_message.Message):
     def __init__(self, houseArea: _Optional[int] = ..., siteArea: _Optional[int] = ..., floorCount: _Optional[int] = ..., region: _Optional[str] = ..., purpose: _Optional[str] = ..., budgetFloor: _Optional[int] = ..., budgetCeil: _Optional[int] = ..., houseAreaPrice: _Optional[int] = ..., siteAreaPrice: _Optional[int] = ..., floorCountPrice: _Optional[int] = ..., regionPrice: _Optional[int] = ..., purposePrice: _Optional[int] = ..., budgetFloorPrice: _Optional[int] = ..., budgetCeilPrice: _Optional[int] = ...) -> None: ...
 
 class SitePreparation(_message.Message):
-    __slots__ = ["siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris"]
+    __slots__ = ["siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris", "siteChoosingPrice", "geologicalWorksPrice", "geodeticalWorksPrice", "cuttingBushesAndSmallForestsPrice", "clearingTheSiteOfDebrisPrice"]
     SITECHOOSING_FIELD_NUMBER: _ClassVar[int]
     GEOLOGICALWORKS_FIELD_NUMBER: _ClassVar[int]
     GEODETICALWORKS_FIELD_NUMBER: _ClassVar[int]
     CUTTINGBUSHESANDSMALLFORESTS_FIELD_NUMBER: _ClassVar[int]
     CLEARINGTHESITEOFDEBRIS_FIELD_NUMBER: _ClassVar[int]
+    SITECHOOSINGPRICE_FIELD_NUMBER: _ClassVar[int]
+    GEOLOGICALWORKSPRICE_FIELD_NUMBER: _ClassVar[int]
+    GEODETICALWORKSPRICE_FIELD_NUMBER: _ClassVar[int]
+    CUTTINGBUSHESANDSMALLFORESTSPRICE_FIELD_NUMBER: _ClassVar[int]
+    CLEARINGTHESITEOFDEBRISPRICE_FIELD_NUMBER: _ClassVar[int]
     siteChoosing: bool
     geologicalWorks: bool
     geodeticalWorks: bool
     cuttingBushesAndSmallForests: bool
     clearingTheSiteOfDebris: bool
-    def __init__(self, siteChoosing: bool = ..., geologicalWorks: bool = ..., geodeticalWorks: bool = ..., cuttingBushesAndSmallForests: bool = ..., clearingTheSiteOfDebris: bool = ...) -> None: ...
+    siteChoosingPrice: int
+    geologicalWorksPrice: int
+    geodeticalWorksPrice: int
+    cuttingBushesAndSmallForestsPrice: int
+    clearingTheSiteOfDebrisPrice: int
+    def __init__(self, siteChoosing: bool = ..., geologicalWorks: bool = ..., geodeticalWorks: bool = ..., cuttingBushesAndSmallForests: bool = ..., clearingTheSiteOfDebris: bool = ..., siteChoosingPrice: _Optional[int] = ..., geologicalWorksPrice: _Optional[int] = ..., geodeticalWorksPrice: _Optional[int] = ..., cuttingBushesAndSmallForestsPrice: _Optional[int] = ..., clearingTheSiteOfDebrisPrice: _Optional[int] = ...) -> None: ...
 
 class SiteWorks(_message.Message):
-    __slots__ = ["cameras", "temporaryFence"]
+    __slots__ = ["cameras", "temporaryFence", "camerasPrice", "temporaryFencePrice"]
     CAMERAS_FIELD_NUMBER: _ClassVar[int]
     TEMPORARYFENCE_FIELD_NUMBER: _ClassVar[int]
+    CAMERASPRICE_FIELD_NUMBER: _ClassVar[int]
+    TEMPORARYFENCEPRICE_FIELD_NUMBER: _ClassVar[int]
     cameras: bool
     temporaryFence: bool
-    def __init__(self, cameras: bool = ..., temporaryFence: bool = ...) -> None: ...
+    camerasPrice: int
+    temporaryFencePrice: int
+    def __init__(self, cameras: bool = ..., temporaryFence: bool = ..., camerasPrice: _Optional[int] = ..., temporaryFencePrice: _Optional[int] = ...) -> None: ...
 
 class HouseDesignAndProject(_message.Message):
-    __slots__ = ["homeProject", "designProject"]
+    __slots__ = ["homeProject", "designProject", "homeProjectPrice", "designProjectPrice"]
     HOMEPROJECT_FIELD_NUMBER: _ClassVar[int]
     DESIGNPROJECT_FIELD_NUMBER: _ClassVar[int]
+    HOMEPROJECTPRICE_FIELD_NUMBER: _ClassVar[int]
+    DESIGNPROJECTPRICE_FIELD_NUMBER: _ClassVar[int]
     homeProject: bool
     designProject: bool
-    def __init__(self, homeProject: bool = ..., designProject: bool = ...) -> None: ...
+    homeProjectPrice: int
+    designProjectPrice: int
+    def __init__(self, homeProject: bool = ..., designProject: bool = ..., homeProjectPrice: _Optional[int] = ..., designProjectPrice: _Optional[int] = ...) -> None: ...
 
 class Step1(_message.Message):
     __slots__ = ["sitePreparation", "siteWorks", "houseDesignAndProject"]
@@ -77,16 +95,20 @@ class Step1(_message.Message):
     def __init__(self, sitePreparation: _Optional[_Union[SitePreparation, _Mapping]] = ..., siteWorks: _Optional[_Union[SiteWorks, _Mapping]] = ..., houseDesignAndProject: _Optional[_Union[HouseDesignAndProject, _Mapping]] = ...) -> None: ...
 
 class Step2(_message.Message):
-    __slots__ = ["foundationType"]
+    __slots__ = ["foundationType", "foundationTypePrice"]
     FOUNDATIONTYPE_FIELD_NUMBER: _ClassVar[int]
+    FOUNDATIONTYPEPRICE_FIELD_NUMBER: _ClassVar[int]
     foundationType: str
-    def __init__(self, foundationType: _Optional[str] = ...) -> None: ...
+    foundationTypePrice: int
+    def __init__(self, foundationType: _Optional[str] = ..., foundationTypePrice: _Optional[int] = ...) -> None: ...
 
 class Step3(_message.Message):
-    __slots__ = ["wallsMaterial"]
+    __slots__ = ["wallsMaterial", "wallsMaterialPrice"]
     WALLSMATERIAL_FIELD_NUMBER: _ClassVar[int]
+    WALLSMATERIALPRICE_FIELD_NUMBER: _ClassVar[int]
     wallsMaterial: str
-    def __init__(self, wallsMaterial: _Optional[str] = ...) -> None: ...
+    wallsMaterialPrice: int
+    def __init__(self, wallsMaterial: _Optional[str] = ..., wallsMaterialPrice: _Optional[int] = ...) -> None: ...
 
 class Step4(_message.Message):
     __slots__ = ["slopesNumber", "roofType"]
@@ -203,6 +225,12 @@ class Step9(_message.Message):
     floorCovering: str
     ceilCovering: str
     def __init__(self, wallDecoration: _Optional[str] = ..., floorCovering: _Optional[str] = ..., ceilCovering: _Optional[str] = ...) -> None: ...
+
+class StepFinal(_message.Message):
+    __slots__ = ["additionalBuildings"]
+    ADDITIONALBUILDINGS_FIELD_NUMBER: _ClassVar[int]
+    additionalBuildings: str
+    def __init__(self, additionalBuildings: _Optional[str] = ...) -> None: ...
 
 class Step1Request(_message.Message):
     __slots__ = ["step0"]
@@ -330,6 +358,30 @@ class Step9Request(_message.Message):
     step8: Step8
     def __init__(self, step0: _Optional[_Union[Step0, _Mapping]] = ..., step1: _Optional[_Union[Step1, _Mapping]] = ..., step2: _Optional[_Union[Step2, _Mapping]] = ..., step3: _Optional[_Union[Step3, _Mapping]] = ..., step4: _Optional[_Union[Step4, _Mapping]] = ..., step5: _Optional[_Union[Step5, _Mapping]] = ..., step6: _Optional[_Union[Step6, _Mapping]] = ..., step7: _Optional[_Union[Step7, _Mapping]] = ..., step8: _Optional[_Union[Step8, _Mapping]] = ...) -> None: ...
 
+class FinalRequest(_message.Message):
+    __slots__ = ["step0", "step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9"]
+    STEP0_FIELD_NUMBER: _ClassVar[int]
+    STEP1_FIELD_NUMBER: _ClassVar[int]
+    STEP2_FIELD_NUMBER: _ClassVar[int]
+    STEP3_FIELD_NUMBER: _ClassVar[int]
+    STEP4_FIELD_NUMBER: _ClassVar[int]
+    STEP5_FIELD_NUMBER: _ClassVar[int]
+    STEP6_FIELD_NUMBER: _ClassVar[int]
+    STEP7_FIELD_NUMBER: _ClassVar[int]
+    STEP8_FIELD_NUMBER: _ClassVar[int]
+    STEP9_FIELD_NUMBER: _ClassVar[int]
+    step0: Step0
+    step1: Step1
+    step2: Step2
+    step3: Step3
+    step4: Step4
+    step5: Step5
+    step6: Step6
+    step7: Step7
+    step8: Step8
+    step9: Step9
+    def __init__(self, step0: _Optional[_Union[Step0, _Mapping]] = ..., step1: _Optional[_Union[Step1, _Mapping]] = ..., step2: _Optional[_Union[Step2, _Mapping]] = ..., step3: _Optional[_Union[Step3, _Mapping]] = ..., step4: _Optional[_Union[Step4, _Mapping]] = ..., step5: _Optional[_Union[Step5, _Mapping]] = ..., step6: _Optional[_Union[Step6, _Mapping]] = ..., step7: _Optional[_Union[Step7, _Mapping]] = ..., step8: _Optional[_Union[Step8, _Mapping]] = ..., step9: _Optional[_Union[Step9, _Mapping]] = ...) -> None: ...
+
 class Step1Response(_message.Message):
     __slots__ = ["step1"]
     STEP1_FIELD_NUMBER: _ClassVar[int]
@@ -383,3 +435,9 @@ class Step9Response(_message.Message):
     STEP9_FIELD_NUMBER: _ClassVar[int]
     step9: Step9
     def __init__(self, step9: _Optional[_Union[Step9, _Mapping]] = ...) -> None: ...
+
+class FinalResponse(_message.Message):
+    __slots__ = ["stepFinal"]
+    STEPFINAL_FIELD_NUMBER: _ClassVar[int]
+    stepFinal: StepFinal
+    def __init__(self, stepFinal: _Optional[_Union[StepFinal, _Mapping]] = ...) -> None: ...

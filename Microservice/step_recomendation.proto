@@ -79,7 +79,7 @@ message Step2 {
 message Step3 {
   string wallsMaterial = 1;
 
-  optional uint32 wallsMaterialPrice = 1;
+  optional uint32 wallsMaterialPrice = 2;
 }
 
 message Step4 {
@@ -149,6 +149,10 @@ message Step9 {
   string wallDecoration = 1;
   string floorCovering = 2;
   string ceilCovering = 3;
+}
+
+message StepFinal {
+  string additionalBuildings = 1;
 }
 
 message Step1Request {
@@ -224,10 +228,20 @@ message Step9Request {
 }
 
 message FinalRequest {
-  uint32 houseArea = 1;
-  uint32 siteArea = 2; 
-  string purpose = 3;
-  uint32 budget = 4;
+  // uint32 houseArea = 1;
+  // uint32 siteArea = 2; 
+  // string purpose = 3;
+  // uint32 budget = 4;
+  Step0 step0 = 1;
+  Step1 step1 = 2;
+  Step2 step2 = 3;
+  Step3 step3 = 4;
+  Step4 step4 = 5;
+  Step5 step5 = 6;
+  Step6 step6 = 7;
+  Step7 step7 = 8;
+  Step8 step8 = 9;
+  Step9 step9 = 10;
 }
 
 
@@ -266,4 +280,8 @@ message Step8Response {
 
 message Step9Response {
   Step9 step9 = 1;
+}
+
+message FinalResponse {
+  StepFinal stepFinal = 1;
 }
