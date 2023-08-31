@@ -10,6 +10,9 @@ service Recomendation_system {
   rpc recomend_step7 (Step7Request) returns (Step7Response) {}
   rpc recomend_step8 (Step8Request) returns (Step8Response) {}
   rpc recomend_step9 (Step9Request) returns (Step9Response) {}
+  
+  rpc recomend_final (FinalRequest) returns (FinalResponse) {}
+
 }
 
 message Step0 {
@@ -20,6 +23,15 @@ message Step0 {
   string purpose = 5;
   uint32 budgetFloor = 6;
   uint32 budgetCeil = 7;
+  
+  optional uint32 houseAreaPrice = 8;
+  optional uint32 siteAreaPrice = 9;
+  optional uint32 floorCountPrice = 10;
+  optional uint32 regionPrice = 11;
+  optional uint32 purposePrice = 12;
+  optional uint32 budgetFloorPrice = 13;
+  optional uint32 budgetCeilPrice = 14;
+  
 }
 
 message SitePreparation {
@@ -28,16 +40,28 @@ message SitePreparation {
   bool geodeticalWorks = 3;
   bool cuttingBushesAndSmallForests = 4;
   bool clearingTheSiteOfDebris = 5;
+
+  optional uint32 siteChoosingPrice = 6;
+  optional uint32 geologicalWorksPrice = 7;
+  optional uint32 geodeticalWorksPrice = 8;
+  optional uint32 cuttingBushesAndSmallForestsPrice = 9;
+  optional uint32 clearingTheSiteOfDebrisPrice = 10;
 }
 
 message SiteWorks {
   bool cameras = 1;
   bool temporaryFence = 2;
+  
+  optional uint32 camerasPrice = 3;
+  optional uint32 temporaryFencePrice = 4;
 }
 
 message HouseDesignAndProject {
   bool homeProject = 1;
   bool designProject = 2;
+
+  optional uint32 homeProjectPrice = 3;
+  optional uint32 designProjectPrice = 4;
 }
 
 message Step1 {
@@ -48,10 +72,14 @@ message Step1 {
 
 message Step2 {
   string foundationType = 1;
+
+  optional uint32 foundationTypePrice = 2;
 }
 
 message Step3 {
   string wallsMaterial = 1;
+
+  optional uint32 wallsMaterialPrice = 1;
 }
 
 message Step4 {
@@ -195,6 +223,12 @@ message Step9Request {
   Step8 step8 = 9;
 }
 
+message FinalRequest {
+  uint32 houseArea = 1;
+  uint32 siteArea = 2; 
+  string purpose = 3;
+  uint32 budget = 4;
+}
 
 
 // The response message containing the greetings

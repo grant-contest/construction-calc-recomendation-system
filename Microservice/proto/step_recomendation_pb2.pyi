@@ -5,7 +5,7 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class Step0(_message.Message):
-    __slots__ = ["houseArea", "siteArea", "floorCount", "region", "purpose", "budgetFloor", "budgetCeil"]
+    __slots__ = ["houseArea", "siteArea", "floorCount", "region", "purpose", "budgetFloor", "budgetCeil", "houseAreaPrice", "siteAreaPrice", "floorCountPrice", "regionPrice", "purposePrice", "budgetFloorPrice", "budgetCeilPrice"]
     HOUSEAREA_FIELD_NUMBER: _ClassVar[int]
     SITEAREA_FIELD_NUMBER: _ClassVar[int]
     FLOORCOUNT_FIELD_NUMBER: _ClassVar[int]
@@ -13,6 +13,13 @@ class Step0(_message.Message):
     PURPOSE_FIELD_NUMBER: _ClassVar[int]
     BUDGETFLOOR_FIELD_NUMBER: _ClassVar[int]
     BUDGETCEIL_FIELD_NUMBER: _ClassVar[int]
+    HOUSEAREAPRICE_FIELD_NUMBER: _ClassVar[int]
+    SITEAREAPRICE_FIELD_NUMBER: _ClassVar[int]
+    FLOORCOUNTPRICE_FIELD_NUMBER: _ClassVar[int]
+    REGIONPRICE_FIELD_NUMBER: _ClassVar[int]
+    PURPOSEPRICE_FIELD_NUMBER: _ClassVar[int]
+    BUDGETFLOORPRICE_FIELD_NUMBER: _ClassVar[int]
+    BUDGETCEILPRICE_FIELD_NUMBER: _ClassVar[int]
     houseArea: int
     siteArea: int
     floorCount: int
@@ -20,7 +27,14 @@ class Step0(_message.Message):
     purpose: str
     budgetFloor: int
     budgetCeil: int
-    def __init__(self, houseArea: _Optional[int] = ..., siteArea: _Optional[int] = ..., floorCount: _Optional[int] = ..., region: _Optional[str] = ..., purpose: _Optional[str] = ..., budgetFloor: _Optional[int] = ..., budgetCeil: _Optional[int] = ...) -> None: ...
+    houseAreaPrice: int
+    siteAreaPrice: int
+    floorCountPrice: int
+    regionPrice: int
+    purposePrice: int
+    budgetFloorPrice: int
+    budgetCeilPrice: int
+    def __init__(self, houseArea: _Optional[int] = ..., siteArea: _Optional[int] = ..., floorCount: _Optional[int] = ..., region: _Optional[str] = ..., purpose: _Optional[str] = ..., budgetFloor: _Optional[int] = ..., budgetCeil: _Optional[int] = ..., houseAreaPrice: _Optional[int] = ..., siteAreaPrice: _Optional[int] = ..., floorCountPrice: _Optional[int] = ..., regionPrice: _Optional[int] = ..., purposePrice: _Optional[int] = ..., budgetFloorPrice: _Optional[int] = ..., budgetCeilPrice: _Optional[int] = ...) -> None: ...
 
 class SitePreparation(_message.Message):
     __slots__ = ["siteChoosing", "geologicalWorks", "geodeticalWorks", "cuttingBushesAndSmallForests", "clearingTheSiteOfDebris"]

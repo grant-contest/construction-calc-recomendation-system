@@ -1,0 +1,17 @@
+def init_additional_buildings_db ():
+    return {"Постоянное место жительства": {"house-projects/zakazat-stroitelstvo-po-proektu-mini-kontejner-dlya-sadovogo-inventarya": 35000, 
+                                            "zakazat-stroitelstvo-po-proektu-drovnica-s-kozyrkom": 47_900,
+                                            "zakazat-stroitelstvo-po-proektu-xozblok-dlya-sadovoj-texniki": 106_200,
+                                            "zakazat-stroitelstvo-po-proektu-mini-garazh-avtomobilnyj": 367_600,
+                                            "house-projects/zakazat-stroitelstvo-po-proektu-garazh-dlya-motocikla": 183_600},
+            "Место отдыха, 'Дача'": {"zakazat-stroitelstvo-po-proektu-banya-faxverk": 2_340_000,
+                                     "zakazat-stroitelstvo-po-proektu-gloriya-1": 28_000_000,
+                                     "zakazat-stroitelstvo-po-proektu-banya-bochka-volga": 187_300,
+                                     "zakazat-stroitelstvo-po-proektu-banya-3": 369_000,
+                                     "zakazat-stroitelstvo-po-proektu-banya-k-3x4": 689_105},
+            "Место работы": {"house-projects/zakazat-stroitelstvo-po-proektu-avtomobilnyj-garazh-1": 220_000,
+                             "zakazat-stroitelstvo-po-proektu-garazh-7m": 248_900,
+                             "zakazat-stroitelstvo-po-proektu-garazh-dlya-avtomobilya": 367_600,
+                             "zakazat-stroitelstvo-po-proektu-sklad-dlya-xraneniya": 129_600,
+                             "zakazat-stroitelstvo-po-proektu-kontejner-dlya-xraneniya-s-oknom": 100_400},
+            }
