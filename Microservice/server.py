@@ -1,160 +1,24 @@
 import numpy as np
 import pandas as pd
-import additional_buildings
+import restrictions
+import generate_df
+import regions
 
-data_path = "Data/"
 
 """# РСХБ"""
-import random
-
-regions = pd.read_csv(data_path + "region.csv")
-regions = regions[regions.columns[2]]
-b = pd.Series(["Донецкая Народная Республика (ДНР)", "Луганская Народная Республика (ЛНР)", "Запорожская область", "Херсонская область"], index=[86, 87, 88, 89])
-regions = regions._append(b)
-regions = regions.drop(85)
-regions
 
 n_rows = 1000
 
-def wallsMaterialRestriction (foundation):
-  if foundation in {"Свайный", "Столбчатый"}:
-    return np.random.choice(["Дерево", "Каркас"])
-  return np.random.choice(["Кирпич", "Легкий бетон", "Дерево", "Каркас"])
-
-def facadeTechnologyRestriction (wallsMaterial):
-  if wallsMaterial == "Каркас":
-    return np.random.choice(["Панели (сайдинг)","Облицовка кирпичом", "Искусственный камень"])
-  if wallsMaterial == "Дерево":
-    return np.random.choice(["Без отделки", "Панели (сайдинг)"])
-  if wallsMaterial == "Кирпич":
-    return "Без отделки"
-  return np.random.choice(["Без отделки", "Панели (сайдинг)", "Облицовка кирпичом", "Искусственный камень"])
-
-def ladderMaterialRestriction (floorCount, foundationType):
-  if floorCount == 1:
-    return "-"
-  if foundationType in {"Свайный", "Столбчатый"}:
-    return np.random.choice(["Дерево", "Металл"])
-  return np.random.choice(["Дерево", "Бетон", "Металл"])
-
-def foundationTypeRestriction(floorCount):
-  if floorCount == 3:
-    return np.random.choice(["Ленточный", "Плитный"])
-  return np.random.choice(["Свайный", "Столбчатый", "Ленточный", "Плитный"])
-
-def any_to_0_1(a):
-  if a > 0:
-    return 1.
-  else:
-    return 0.
 
 
-add_buildings_db = additional_buildings.init_additional_buildings_db()
-add_buildings_names = []
-for key, value in add_buildings_db.items():
-  add_buildings_names.append(key)
-print(add_buildings_names)
-def generate_df(n_rows):
-  floorCounts = [(float(random.randint(1, 3))) for i in range(n_rows)]
-  foundationTypes = [foundationTypeRestriction(floorCounts[i]) for i in range(n_rows)]
-  wallsMaterial = [wallsMaterialRestriction(foundationTypes[i]) for i in range(n_rows)]
 
-  df = pd.DataFrame({
-  # step 0
-  "houseArea": [float(random.randint(25, 250)) for i in range(n_rows)],
-  "siteArea": [float(random.randint(0, 100)) for i in range(n_rows)],
-  "floorCount": floorCounts,
-  "region": [np.random.choice(regions) for i in range(n_rows)],
-  "purpose": [np.random.choice(["Постоянное место жительства", "Место отдыха, 'Дача'", "Место работы"]) for i in range(n_rows)],
-  "budgetFloor": [float(random.randint(500_000, 5_000_000)) for i in range(n_rows)],
-  "budgetCeil": [float(random.randint(5_000_000, 25_000_000)) for i in range(n_rows)],
+regions = regions.get_regions()
 
-  # step 1
-  # sitePreparation
-  "siteChoosing": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "geologicalWorks": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "geodeticalWorks": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "cuttingBushesAndSmallForests": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "clearingTheSiteOfDebris": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
 
-  # siteWorks
-  "cameras": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "temporaryFence": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # houseDesignAndProject
-  "homeProject": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "designProject": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # step 2
-  "foundationType": foundationTypes,
-
-  # step 3
-  "wallsMaterial": wallsMaterial,
-
-  # step 4
-  "slopesNumber": [random.randint(1, 4) for i in range(n_rows)],
-  "roofType": [np.random.choice(["Металлочерепица", "Гибкая черепица", "Рулонные материалы", "Ондулин", "Профнастил"]) for i in range(n_rows)],
-
-  # step 5
-  "facadeTechnology": [facadeTechnologyRestriction(wallsMaterial[i]) for i in range(n_rows)],
-
-  # step 6
-  "windowMaterial": [np.random.choice(["Деревянные", "Пластиковые"]) for i in range(n_rows)],
-  "windowType": [np.random.choice(["Однокамерные", "Двухкамерные", "Трехкамерные"]) for i in range(n_rows)],
-  "doorMaterial": [np.random.choice(["Деревянные", "Пластиковые"]) for i in range(n_rows)],
-
-  # step 7
-  # electrician
-  "plasticBoxesUpTo40mmWide": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "layingAThreeToFive": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "cableLaying": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfTwoKey": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfSingleKey": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "recessedTypeSocketDevice": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfPendant": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "chandeliersAndPendants": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # waterSupply
-  # "layingOfInternalPipelines"
-  "layingOfInternalWaterSupplyPipelines": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfBathtubs": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfSingle": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfMixers": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # sewerage
-  "installationOfToilet": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "layingOfSewerage50mm": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "layingOfSewerage110mm": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # heating
-  "assemblyOfAWaterSupply": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  # "layingOfInternalPipelines"
-  "layingOfInternalHeatingPipelines": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "installationOfWindowFixtures": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # ventilation
-  "installationOfSplitSystems": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "cablingOnABrickWall": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-
-  # step 8
-  "warmFloor": [any_to_0_1(np.random.randn()) for i in range(n_rows)],
-  "ladderMaterial": [ladderMaterialRestriction(floorCounts[i], foundationTypes[i]) for i in range(n_rows)],
-
-  # step 9
-  "wallDecoration": [np.random.choice(["Декоративная штукатурка", "Покраска", "Обои", "Плитка"]) for i in range(n_rows)],
-  "floorCovering": [np.random.choice(["Ламинат", "Линолеум"]) for i in range(n_rows)],
-  "ceilCovering": [np.random.choice(["Натяжной потолок", "Окраска", "Обои", "Штукатурка"]) for i in range(n_rows)],
-
-  # final
-  "additionalBuildings": [np.random.choice(add_buildings_names) for i in range(n_rows)],
-
-  })
-
-  return df
 train_test_quotient = 1
-train_df = generate_df(n_rows)
-test_df = generate_df(int(n_rows * train_test_quotient))
-test_sample = generate_df(1)
+train_df = generate_df.gen_df(n_rows)
+test_df = generate_df.gen_df(int(n_rows * train_test_quotient))
+test_sample = generate_df.gen_df(1)
 
 # val_df = generate_df(int(n_rows * 0.2 * 0.2))
 
@@ -175,9 +39,6 @@ steps[7] = {"plasticBoxesUpTo40mmWide", "layingAThreeToFive", "cableLaying", "in
 steps[8] = {"warmFloor", "ladderMaterial"}
 steps[9] = {"wallDecoration", "floorCovering", "ceilCovering"}
 steps[10] = {"additionalBuildings"}
-
-
-
 
 cols_dense = [
   "houseArea",
@@ -276,8 +137,6 @@ train_df[cols_sparse].dtypes
 
 # train_df[cols_sparse]
 train_df.dtypes
-# map_sparse = {}
-# map_sparse_rev = {}
 
 def encode(col_value, map_rev):
     return [map_rev.get(col_value, col_value)]
@@ -330,7 +189,7 @@ X_pred.shape
 
 # выводим метрику
 print('Train user-based CF MSE: ' + str(rmse(X_pred, train_df_enc_np)))
-print('Test user-based CF MSE: ' + str(rmse(X_pred, test_df_enc_np)))
+# print('Test user-based CF MSE: ' + str(rmse(X_pred, test_df_enc_np)))
 
 
 """# Predict function
@@ -366,35 +225,7 @@ def get_feature_cols (all_columns, feature):
         cols.add(col)
   return cols
 
-def apply_restrictions(sample, cols, step_number, feature):
-  cols_copy = cols.copy()
-  print("Before restrictions: ", cols)
-  for col in cols_copy:
-    cols.remove(col)
-    cols.add(col[len(feature)+1:])
-  if step_number == 3 and sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
-    cols = {"Дерево","Каркас"}
-  if step_number == 5:
-    match sample["wallsMaterial"].item():
-      case "Каркас":
-        cols = {"Панели (сайдинг)", "Облицовка кирпичом", "Искусственный камень"}
-      case "Дерево":
-        cols = {"Без отделки", "Панели (сайдинг)"}
-      case "Кирпич":
-        cols = {"Без отделки"}
-  if step_number == 8 and feature == "ladderMaterial":
-    if sample["floorCount"].item() == 1:
-      cols = {"-"}
-    if sample["foundationType"].item() in {"Свайный", "Столбчатый"}:
-      cols = {"Дерево", "Металл"}
-  if step_number == 2 and (sample["floorCount"].item() == 3):
-    cols = {"Ленточный", "Плитный"}
-  cols_copy = cols.copy()
-  for col in cols_copy:
-    cols.remove(col)
-    cols.add(feature + '_' + col)
-  print("After restrictions: ", cols)
-  return cols
+
 
 def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_number, top):
   sample_enc = encode_by_column(sample, columns_values_map)
@@ -411,7 +242,7 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
   features = steps[step_number]
   for feature in features:
     cols = get_feature_cols(columns, feature)
-    cols = apply_restrictions(sample, cols, step_number, feature)
+    cols = restrictions.apply_restrictions(sample, cols, step_number, feature)
     if top == 1:
       col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
       predicts[feature] = col_name_of_max.iloc[0][len(feature)+1:]
@@ -420,7 +251,9 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
       for i in range(top):
         col_name_of_max = predicted_sample_df[list(cols)].idxmax(axis=1)
         tops.append(col_name_of_max.iloc[0][len(feature)+1:])
-        predicted_sample_df.drop(columns = [col_name_of_max.iloc[0]])
+        cols.remove(col_name_of_max.iloc[0])
+        # col_name_of_max = col_name_of_max.drop(columns = col_name_of_max.iloc[0])
+        predicted_sample_df = predicted_sample_df.drop(columns = [col_name_of_max.iloc[0]])
 
       predicts[feature] = tops
   for key, value in predicts.items():
@@ -435,10 +268,6 @@ def step_predict (df_enc_np, columns, columns_values_map, sample, steps, step_nu
 
 train_df_encoded_by_columns_np = train_df_encoded_by_columns.to_numpy()
 
-# for i in range(1, len(steps)):
-#   print(i)
-#   step_predict(train_df_enc_np, train_df_encoded_by_columns.columns, columns_values_map, test_sample, steps, i)
-
 def get_default_sample (train_df_encoded_by_columns):
   sample = train_df_encoded_by_columns.iloc[0].copy()
   for col in train_df_encoded_by_columns.columns:
@@ -450,9 +279,6 @@ from concurrent import futures
 import logging
 
 import grpc
-# import proto.step_recomendation_pb2 as sr_pb2
-# import proto.step_recomendation_pb2_grpc as sr_pb2_grpc
-
 import sys
 sys.path.append('proto/')
 
@@ -728,8 +554,6 @@ class Recomendation_system(sr_pb2_grpc.Recomendation_systemServicer):
       return recomend_stepx(self, request, context, 9)
     def recomend_final(self, request, context):
       return recomend_stepx(self, request, context, 10)
-
-print(train_df["purpose"])
 
 def serve():
     port = "50051"
